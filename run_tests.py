@@ -1,8 +1,7 @@
 import os
 import difflib
 
-rootdir = 'C:/Users/aahma/Desktop/SDC_Tests'
-
+#list of all the directories with input file in them
 dirs = ['','','','','','','']
 dirs[0] = r'.\tests\01_pre_wit_test_1_r'
 dirs[1] = r'.\tests\02_pre_wit_test_3_r'
@@ -23,8 +22,6 @@ def compare(newResults,oldResults,comparison):
         #oldR=set(f.readlines())
         oldR = f.readlines()
 
-    #open(comparison,'w').close() #Create the file
-
     with open(comparison,'a') as f:
         f.write('\n\n\n=====================================================\n\n')
         f.write(newResults+'\n')
@@ -38,11 +35,9 @@ def compare(newResults,oldResults,comparison):
                 pass
            
 
-def main():
-    for subdir, dirs, files in os.walk(rootdir):
-        for directory in dirs:
-            print(subdir, files, directory)
-
+#Copies the input file from test_dir to the folders containing old and new calculation engines
+#then runs the calculation engines and moves the results back the directory where the input file was
+#then cleans up the directories containing calculation engines.
 def runCalcs(test_dir):
         copyCommandNew = 'xcopy /Y ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\new_calc_engine'
         copyCommandOld = 'xcopy /Y ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\old_calc_engine'
