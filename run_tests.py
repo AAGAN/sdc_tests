@@ -1,4 +1,5 @@
 import os
+import difflib
 
 rootdir = 'C:/Users/aahma/Desktop/SDC_Tests'
 
@@ -15,20 +16,27 @@ exeFile = '70barSapphire.exe'
 
 def compare(newResults,oldResults,comparison):
     with open(newResults,'r') as f:
-        newR=set(f.readlines())
+        #newR=set(f.readlines())
+        newR = f.readlines()
 
     with open(oldResults,'r') as f:
-        oldR=set(f.readlines())
+        #oldR=set(f.readlines())
+        oldR = f.readlines()
 
     #open(comparison,'w').close() #Create the file
 
     with open(comparison,'a') as f:
-        f.write('=====================================================\n')
+        f.write('\n\n\n=====================================================\n\n')
         f.write(newResults+'\n')
         f.write(oldResults+'\n')
         f.write(comparison+'\n\n')
-        for line in list(newR-oldR):
-           f.write(line)
+        #for line in list(newR-oldR):
+        #       f.write(line)
+        for line in difflib.unified_diff(newR, oldR, fromfile=newResults, tofile=oldResults, lineterm=''):
+                #print(line)
+                f.write(line+'\n')
+                pass
+           
 
 def main():
     for subdir, dirs, files in os.walk(rootdir):
