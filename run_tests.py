@@ -2,25 +2,6 @@ import os
 
 rootdir = 'C:/Users/aahma/Desktop/SDC_Tests'
 
-def compare(File1,File2):
-    with open(File1,'r') as f:
-        d=set(f.readlines())
-
-
-    with open(File2,'r') as f:
-        e=set(f.readlines())
-
-    open('file3.txt','w').close() #Create the file
-
-    with open('file3.txt','a') as f:
-        for line in list(d-e):
-           f.write(line)
-
-def main():
-    for subdir, dirs, files in os.walk(rootdir):
-        for directory in dirs:
-            print(subdir, files, directory)
-
 dirs = ['','','','','','','']
 dirs[0] = r'.\tests\01_pre_wit_test_1_r'
 dirs[1] = r'.\tests\02_pre_wit_test_3_r'
@@ -30,11 +11,35 @@ dirs[4] = r'.\tests\05_wit_2_as_built'
 dirs[5] = r'.\tests\06_wit_3_design_rev_4'
 dirs[6] = r'.\tests\07_wit_4_unbalanced_as_built'
 
+exeFile = '70barSapphire.exe'
+
+def compare(newResults,oldResults,comparison):
+    with open(newResults,'r') as f:
+        newR=set(f.readlines())
+
+    with open(oldResults,'r') as f:
+        oldR=set(f.readlines())
+
+    #open(comparison,'w').close() #Create the file
+
+    with open(comparison,'a') as f:
+        f.write('=====================================================\n')
+        f.write(newResults+'\n')
+        f.write(oldResults+'\n')
+        f.write(comparison+'\n\n')
+        for line in list(newR-oldR):
+           f.write(line)
+
+def main():
+    for subdir, dirs, files in os.walk(rootdir):
+        for directory in dirs:
+            print(subdir, files, directory)
+
 def runCalcs(test_dir):
         copyCommandNew = 'xcopy /Y ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\new_calc_engine'
         copyCommandOld = 'xcopy /Y ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\old_calc_engine'
-        execCommandNew = r'.\tests\new_calc_engine\70barSapphire.exe'
-        execCommandOld = r'.\tests\old_calc_engine\70barSapphire.exe'
+        execCommandNew = '.\\tests\\new_calc_engine\\' + exeFile
+        execCommandOld = '.\\tests\\old_calc_engine\\' + exeFile
         moveCommandNew = r'move /Y .\tests\new_calc_engine\ResultsOut.tmp ' + test_dir + r'\ResultsOut_new.tmp'
         moveCommandOld = r'move /Y .\tests\old_calc_engine\ResultsOut.tmp ' + test_dir + r'\ResultsOut_old.tmp'
         deleteCommandNew = r'del .\tests\new_calc_engine\TEMPINPUT.TMP'
@@ -48,6 +53,11 @@ def runCalcs(test_dir):
         os.system(deleteCommandNew)
         os.system(deleteCommandOld)
 
-
+comp = r'.\tests\comparison.txt'
+open(comp,'w').close() #Create the file
 for directory in dirs:
         runCalcs(directory)
+        newResult = directory+r'\ResultsOut_new.tmp'
+        oldResult = directory+r'\ResultsOut_old.tmp'
+        compare(newResult,oldResult,comp)
+        pass
