@@ -1,5 +1,6 @@
 import os
 import difflib
+#import diff_match_patch as dmp_module
 
 #list of all the directories with input file in them
 dirs = ['','','','','','','']
@@ -30,17 +31,14 @@ def compare(newResults,oldResults,comparison):
         #for line in list(newR-oldR):
         #       f.write(line)
         for line in difflib.unified_diff(newR, oldR, fromfile=newResults, tofile=oldResults, lineterm=''):
-                #print(line)
-                f.write(line+'\n')
-                pass
-           
+                f.write(line+'\n')           
 
 #Copies the input file from test_dir to the folders containing old and new calculation engines
 #then runs the calculation engines and moves the results back the directory where the input file was
 #then cleans up the directories containing calculation engines.
 def runCalcs(test_dir):
-        copyCommandNew = 'xcopy /Y ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\new_calc_engine'
-        copyCommandOld = 'xcopy /Y ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\old_calc_engine'
+        copyCommandNew = 'xcopy /Y /f ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\new_calc_engine'
+        copyCommandOld = 'xcopy /Y /f ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\old_calc_engine'
         execCommandNew = '.\\tests\\new_calc_engine\\' + exeFile
         execCommandOld = '.\\tests\\old_calc_engine\\' + exeFile
         moveCommandNew = r'move /Y .\tests\new_calc_engine\ResultsOut.tmp ' + test_dir + r'\ResultsOut_new.tmp'
@@ -56,11 +54,42 @@ def runCalcs(test_dir):
         os.system(deleteCommandNew)
         os.system(deleteCommandOld)
 
+#main part of the program, first create a file to store the differences between files. we
+#only create the file here and in the loop we append the results for each input file to the
+#same comparison file.
 comp = r'.\tests\comparison.txt'
 open(comp,'w').close() #Create the file
+allOlds = 'allOldResults.txt' 
+allNews = 'allNewResults.txt'
+
+#loop through all the directories, run the calcs and compare the results.
 for directory in dirs:
         runCalcs(directory)
         newResult = directory+r'\ResultsOut_new.tmp'
         oldResult = directory+r'\ResultsOut_old.tmp'
         compare(newResult,oldResult,comp)
         pass
+
+#create a file including all the old results
+with open(allOlds, 'w') as outfile:
+        for directory in dirs:
+                fname = directory+r'\ResultsOut_old.tmp'
+                outfile.write('\n\n============================================\n')
+                outfile.write('\n'+fname+'\n')
+                with open(fname) as infile:
+                        for line in infile:
+                                outfile.write(line)
+
+#create a file containing all the new results
+with open(allNews, 'w') as outfile:
+        for directory in dirs:
+                fname = directory+r'\ResultsOut_new.tmp'
+                outfile.write('\n\n============================================\n')
+                outfile.write('\n'+fname+'\n')
+                with open(fname) as infile:
+                        for line in infile:
+                                outfile.write(line)
+
+
+#comparison between allNewResults.txt and allOldResults.txt can be done using this website:
+#http://gerhobbelt.github.io/google-diff-match-patch/demos/demo_diff.html
