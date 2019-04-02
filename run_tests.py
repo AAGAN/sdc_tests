@@ -1,6 +1,5 @@
 import os
 import difflib
-#import diff_match_patch as dmp_module
 
 #list of all the directories with input file in them
 dirs = ['','','','','','','']
