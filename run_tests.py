@@ -12,6 +12,8 @@ dirs[5] = r'.\tests\06_wit_3_design_rev_4'
 dirs[6] = r'.\tests\07_wit_4_unbalanced_as_built'
 
 exeFile = '70barSapphire.exe'
+newCalcEngineFolder = r'.\tests\new_calc_engine\\'
+oldCalcEngineFolder = r'.\tests\old_calc_engine\\'
 
 def compare(newResults,oldResults,comparison):
     with open(newResults,'r') as f:
@@ -36,14 +38,14 @@ def compare(newResults,oldResults,comparison):
 #then runs the calculation engines and moves the results back the directory where the input file was
 #then cleans up the directories containing calculation engines.
 def runCalcs(test_dir):
-        copyCommandNew = 'xcopy /Y /f ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\new_calc_engine'
-        copyCommandOld = 'xcopy /Y /f ' + test_dir + r'\TEMPINPUT.TMP' + r' .\tests\old_calc_engine'
-        execCommandNew = '.\\tests\\new_calc_engine\\' + exeFile
-        execCommandOld = '.\\tests\\old_calc_engine\\' + exeFile
-        moveCommandNew = r'move /Y .\tests\new_calc_engine\ResultsOut.tmp ' + test_dir + r'\ResultsOut_new.tmp'
-        moveCommandOld = r'move /Y .\tests\old_calc_engine\ResultsOut.tmp ' + test_dir + r'\ResultsOut_old.tmp'
-        deleteCommandNew = r'del .\tests\new_calc_engine\TEMPINPUT.TMP'
-        deleteCommandOld = r'del .\tests\old_calc_engine\TEMPINPUT.TMP'
+        copyCommandNew = 'xcopy /Y /f ' + test_dir + r'\TEMPINPUT.TMP ' + newCalcEngineFolder
+        copyCommandOld = 'xcopy /Y /f ' + test_dir + r'\TEMPINPUT.TMP ' + oldCalcEngineFolder
+        execCommandNew = newCalcEngineFolder + exeFile
+        execCommandOld = oldCalcEngineFolder + exeFile
+        moveCommandNew = r'move /Y ' + newCalcEngineFolder +'ResultsOut.tmp ' + test_dir + r'\ResultsOut_new.tmp'
+        moveCommandOld = r'move /Y ' + oldCalcEngineFolder +'ResultsOut.tmp ' + test_dir + r'\ResultsOut_old.tmp'
+        deleteCommandNew = r'del '+ newCalcEngineFolder + 'TEMPINPUT.TMP'
+        deleteCommandOld = r'del '+ oldCalcEngineFolder + 'TEMPINPUT.TMP'
         os.system(copyCommandNew)
         os.system(copyCommandOld)
         os.system(execCommandNew)
