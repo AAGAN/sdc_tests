@@ -2,7 +2,7 @@ import os
 import difflib
 
 #list of all the directories with input file in them
-dirs = ['','','','','','','']
+dirs = ['','','','','','','','']
 dirs[0] = r'.\tests\01_pre_wit_test_1_r'
 dirs[1] = r'.\tests\02_pre_wit_test_3_r'
 dirs[2] = r'.\tests\03_pre_wit_test_7_r'
@@ -10,6 +10,7 @@ dirs[3] = r'.\tests\04_wit_1_as_built'
 dirs[4] = r'.\tests\05_wit_2_as_built'
 dirs[5] = r'.\tests\06_wit_3_design_rev_4'
 dirs[6] = r'.\tests\07_wit_4_unbalanced_as_built'
+dirs[7] = r'.\tests\08_complex_system'
 
 exeFile = '70barSapphire.exe'
 newCalcEngineFolder = r'.\tests\new_calc_engine\\'
