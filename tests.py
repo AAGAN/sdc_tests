@@ -265,6 +265,65 @@ for inf in hydraulicsOptions:
 
 driver.find_element_by_xpath('/html/body/table[1]/tbody/tr[2]/td/div/table/tbody/tr/td[2]/button').click()
 
+#go to the projects page
+driver.find_element_by_link_text('Projects').click()
+
+#Expand the project line and click on the "Hydraulic Run Manager"
+driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr/td[1]').click()
+time.sleep(waitToLoad)
+driver.find_element_by_link_text('Acoustic Nozzle Calculation').click()
+
+#click on new room button
+roomsPage = driver.current_window_handle
+driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[3]').click()
+
+driver.switch_to.window('ewindow')
+
+info = BOMEnclosure
+for inf in info:
+    elements = driver.find_elements_by_name(inf)
+    for i in elements:
+        if i.is_enabled():
+            if '<input' in i.get_property('outerHTML'):
+                i.clear()
+                i.send_keys(info[inf])
+            else:
+                i.send_keys(info[inf])
+
+#Save the room info and return to rooms page
+driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[5]/div[1]/button[1]').click()
+driver.switch_to.window(roomsPage)
+
+#click on the room 
+driver.find_element_by_xpath('//*[@id="tRooms"]/tbody/tr').click()
+time.sleep(1)
+
+#click on the new button in the Nozzles iFrame
+driver.switch_to.default_content()
+driver.switch_to.frame(driver.find_element_by_id('frameRoom'))
+driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+#driver.find_element_by_xpath('body > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > button:nth-child(1)')
+
+driver.switch_to.window('ewindow')
+
+info = addNozzle
+for inf in info:
+    elements = driver.find_elements_by_name(inf)
+    for i in elements:
+        time.sleep(waitToLoad)
+        if i.is_enabled():
+            if '<input' in i.get_property('outerHTML'):
+                i.clear()
+                i.send_keys(info[inf])
+            else:
+                i.send_keys(info[inf])
+                
+driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[4]/div/button[2]')
+driver.switch_to.window(roomsPage)
+
+#click on the calculate button
+driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[6]').click()
+
 #return to the projects page 
 driver.find_element_by_link_text('Projects').click()
 

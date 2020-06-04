@@ -136,3 +136,28 @@ hydraulicsOptions = {
     'cboNozzleType' : 'Fixed Nozzle', #'Agent Quantity', #'Fixed Nozzle'
     'cboFVAType' : 'Ansul' # 'FIA'
 }
+
+# Acoustic Nozzle Calculator
+# New Room page
+BOMEnclosure = {
+    'vroomname' : 'Enc1',
+    'cboHardware' : 'iFlow',
+    'vlength' : '5',
+    'vwidth' : '5',
+    'vheight' : '5',
+    'vvolume' : '115',
+    'vreceiverdist' : '2',
+    'vtargetpress' : '100',
+    'vdatarackcount' : '5',
+    'vhumidity' : '50',
+    'vpressure' : '250',
+    'vtemp' : '25'
+}
+
+#add Nozzle window
+addNozzle = {
+    #'cboRun' , 'NameOfRun',
+    'cboNozzType' : '1-1/2 Acoustic Nozzle - INERT', #'3/4 Acoustic Nozzle - INERT' 'Standard Nozzle - INERT'
+    'cboPeakRate' : '41-62',
+    'vNozzleCount' : '2'
+}
