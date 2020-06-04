@@ -1,6 +1,6 @@
 #server to test
-server = "http://10.16.74.48/sdc/" 
-#server = "http://www.suppressiondesigncenter.com"
+#server = "http://10.16.74.48/sdc/" 
+server = "http://www.suppressiondesigncenter.com"
 
 #login page https://www.suppressiondesigncenter.com/sdc/
 fUsername = 'aagan2'
@@ -115,3 +115,12 @@ systemOptions={
 
 #Vent BOM page (https://www.suppressiondesigncenter.com/fsdc/systems/inert/iflow/ventbom.php)
 cboVenttype = 'Internal Mount'
+
+#Hydraulic Options page
+hydraulicsOptions = {
+    'txtPipeTemp' : '20',
+    'txtDischargeTime' : '120',
+    'txtCylQty' : '3',
+    'cboNozzleType' : 'Fixed Nozzle', #'Agent Quantity', #'Fixed Nozzle'
+    'cboFVAType' : 'Ansul' # 'FIA'
+}

@@ -201,6 +201,7 @@ driver.find_element_by_id('continue').click()
 #system options page
 for opt in systemOptions:
     driver.find_element_by_id(opt).send_keys(systemOptions[opt])
+    time.sleep(waitToLoad)
     
 driver.find_element_by_xpath('/html/body/table[1]/tbody/tr[2]/td/div/table/tbody/tr/td[2]/button').click()
 
@@ -253,6 +254,50 @@ for i in BOM:
     #print(str(i.get_attribute('innerHTML')))
     print(parser.feed(str(i.get_attribute('innerHTML'))))
     parser.close()
+
+#return to the projects page 
+driver.find_element_by_link_text('Projects').click()
+
+#Expand the project line and click on the "Hydraulic Run Manager"
+driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr/td[1]').click()
+time.sleep(waitToLoad)
+driver.find_element_by_link_text('Hydraulic Run Manager').click()
+
+#Create a new run
+hydraulic_runs_page = driver.current_window_handle
+driver.find_element_by_link_text('New Run').click()
+driver.switch_to.window('New Run')
+
+runName = driver.find_element_by_id('runname')
+runName.clear()
+runName.send_keys("test1")
+
+runDescription = driver.find_element_by_id('rundesc')
+runDescription.clear()
+runDescription.send_keys("Description of test1")
+
+driver.find_element_by_xpath('/html/body/table[3]/tbody/tr/td/table/tbody/tr/td[1]/button').click()
+driver.switch_to.window(hydraulic_runs_page)
+
+#Click on the play button to start the hydraulic 
+driver.find_element_by_xpath('/html/body/table[1]/tbody/tr/td/table[2]/tbody/tr/td/table/tbody/tr[2]/td[1]/a[4]/img').click()
+
+
+
+#Hydraulic Options page (https://www.suppressiondesigncenter.com/fsdc/systems/inert/iflow/calc/calc_hydraulicoptions.php)
+#This code deals with cases where some elements are disabled
+for inf in hydraulicsOptions:
+    print(inf)
+    elements = driver.find_elements_by_name(inf)
+    for i in elements:
+        if i.is_enabled():
+            if i.get_attribute('type') == 'text':
+                i.clear()
+                i.send_keys(hydraulicsOptions[inf])
+            else:
+                i.send_keys(hydraulicsOptions[inf])
+    
+driver.find_element_by_xpath('/html/body/table[1]/tbody/tr[2]/td/div/table/tbody/tr/td[2]/button').click()
 
 #return to the projects page 
 driver.find_element_by_link_text('Projects').click()
