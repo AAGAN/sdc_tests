@@ -83,12 +83,19 @@ newProjectButton.click()
 
 #fill the new porject form and submit it
 driver.switch_to.window("New Project")
-driver.find_element_by_id('cboUnits').send_keys(cboUnits)
-projectName = driver.find_element_by_id('projectname')
-projectName.clear()
-projectName.send_keys(projectname)
-systemType = driver.find_element_by_name('cboSystem')
-systemType.send_keys(cboSystem)
+
+#This code deals with cases where some elements are disabled
+for inf in addProject:
+    elements = driver.find_elements_by_name(inf)
+    for i in elements:
+        #time.sleep(waitToLoad)
+        if i.is_enabled():
+            if '<input' in i.get_property('outerHTML'):
+                i.clear()
+                i.send_keys(addProject[inf])
+            else:
+                i.send_keys(addProject[inf])
+
 saveButton = driver.find_element_by_css_selector('body > table:nth-child(3) > tbody > tr > td > table > tbody > tr > td:nth-child(1) > button')
 saveButton.click()
 
@@ -98,57 +105,17 @@ driver.switch_to.window(projectsPage)
 driver.find_element_by_css_selector('#tProjects > tbody > tr:nth-child(1) > td.minheight > a:nth-child(7)').click()
 
 #System Details page
-driver.find_element_by_id('cboBrand').send_keys(cboBrand)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboSystype').send_keys(cboSystype)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboSysApproval').send_keys(cboSysApproval)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboAgenttype').send_keys(cboAgenttype)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboDesignStandards').send_keys(cboDesignStandards)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboFireClasses').send_keys(cboFireClasses)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboReserve').send_keys(cboReserve)
-time.sleep(waitToLoad)
-
-minTemp = driver.find_element_by_id('txtMinTemp')
-minTemp.clear()
-minTemp.send_keys(txtMinTemp)
-time.sleep(waitToLoad)
-
-maxTemp = driver.find_element_by_id('txtMaxTemp')
-maxTemp.clear()
-maxTemp.send_keys(txtMaxTemp)
-time.sleep(waitToLoad)
-
-altitude = driver.find_element_by_id('txtAltitude')
-altitude.clear()
-altitude.send_keys(txtAltitude)
-time.sleep(waitToLoad)
-
-pressureChange = driver.find_element_by_id('txtPressureChange')
-pressureChange.clear()
-pressureChange.send_keys(txtPressureChange)
-time.sleep(waitToLoad)
-
-designConcentration = driver.find_element_by_id('txtDesignConcentration')
-designConcentration.clear()
-designConcentration.send_keys(txtDesignConcentration)
-time.sleep(waitToLoad)
-
-driver.find_element_by_id('txtDischargeTime').send_keys(txtDischargeTime)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboSystemPressures').send_keys(cboSystemPressures)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboContainerApproval').send_keys(cboContainerApproval)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboContainerSizes').send_keys(cboContainerSizes)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboNozzles').send_keys(cboNozzles)
-time.sleep(waitToLoad)
-driver.find_element_by_id('cboMulti').send_keys(cboMulti)
+#This code deals with cases where some elements are disabled
+for inf in systemDetails:
+    elements = driver.find_elements_by_name(inf)
+    for i in elements:
+        time.sleep(waitToLoad)
+        if i.is_enabled():
+            if '<input' in i.get_property('outerHTML'):
+                i.clear()
+                i.send_keys(systemDetails[inf])
+            else:
+                i.send_keys(systemDetails[inf])
 
 #click on save and continue button to go to the hazard management page
 driver.find_element_by_css_selector('body > table:nth-child(4) > tbody > tr:nth-child(2) > td > div > table > tbody > tr > td:nth-child(2) > button').click()
@@ -287,16 +254,15 @@ driver.find_element_by_xpath('/html/body/table[1]/tbody/tr/td/table[2]/tbody/tr/
 #Hydraulic Options page (https://www.suppressiondesigncenter.com/fsdc/systems/inert/iflow/calc/calc_hydraulicoptions.php)
 #This code deals with cases where some elements are disabled
 for inf in hydraulicsOptions:
-    print(inf)
     elements = driver.find_elements_by_name(inf)
     for i in elements:
         if i.is_enabled():
-            if i.get_attribute('type') == 'text':
+            if '<input' in i.get_property('outerHTML'):
                 i.clear()
                 i.send_keys(hydraulicsOptions[inf])
             else:
                 i.send_keys(hydraulicsOptions[inf])
-    
+
 driver.find_element_by_xpath('/html/body/table[1]/tbody/tr[2]/td/div/table/tbody/tr/td[2]/button').click()
 
 #return to the projects page 

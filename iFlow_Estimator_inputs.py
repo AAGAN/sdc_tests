@@ -1,35 +1,47 @@
 #server to test
-#server = "http://10.16.74.48/sdc/" 
-server = "http://www.suppressiondesigncenter.com"
+server = "http://10.16.74.48/sdc/" 
+#server = "http://www.suppressiondesigncenter.com"
 
 #login page https://www.suppressiondesigncenter.com/sdc/
 fUsername = 'aagan2'
 fPassword = 'Jci8124@agan'
 
 #New Project page https://www.suppressiondesigncenter.com/fsdc/add_project.php
-cboUnits = 'Metric'
-projectname = 'test'
-cboSystem = 'Inert'
+addProject = {
+    'cboUnits' : 'Metric',
+    'projectname': 'Test',
+    'cboSystem' : 'Inert Gas',
+    'address1' : '1467 Elmwood Ave.',
+    'address2': ' ',
+    'projectcity' : 'Cranston',
+    'projectref' : 'Test Case',
+    'customer' : 'JCI',
+    'cboCountry' : 'United States',
+    'cboState' : 'Rhode Island',
+    'projectzip' : '02910'
+}
 
 #System Details https://www.suppressiondesigncenter.com/fsdc/systems/inert/iflow/systemdetails.php
-cboBrand  = 'ANSUL'
-cboSystype = 'iFlow System'
-cboSysApproval = 'UL/ULC/FM'
-cboAgenttype = 'IG-541 (Inergen)'
-cboDesignStandards = 'NFPA 2001'
-cboFireClasses = 'Surface Class A'
-cboReserve = 'No'
-txtMinTemp = '20'
-txtMaxTemp = '100'
-txtAltitude = '0'
-txtPressureChange = '250'
-txtDesignConcentration = '34.2'
-txtDischargeTime = '120 s'
-cboSystemPressures = '300 bar'
-cboContainerApproval = 'TPED'
-cboContainerSizes = '80 L'
-cboNozzles = 'Inert Acoustic'
-cboMulti = 'Simultaneous'
+systemDetails = {
+    'cboBrand'  : 'ANSUL',
+    'cboSystype' : 'iFlow System',
+    'cboSysApproval' : 'UL/ULC/FM',
+    'cboAgenttype' : 'IG-541 (Inergen)',
+    'cboDesignStandards' : 'NFPA 2001',
+    'cboFireClasses' : 'Surface Class A',
+    'cboReserve' : 'No',
+    'txtMinTemp' : '20',
+    'txtMaxTemp' : '100',
+    'txtAltitude' : '0',
+    'txtPressureChange' : '250',
+    'txtDesignConcentration' : '34.2',
+    'txtDischargeTime' : '120 s',
+    'cboSystemPressures' : '300 bar',
+    'cboContainerApproval' : 'TPED',
+    'cboContainerSizes' : '80 L',
+    'cboNozzles' : 'Inert Acoustic',
+    'cboMulti' : 'Simultaneous',
+}
 
 #Hazard Management page
 Hazards = [
