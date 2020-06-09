@@ -96,13 +96,13 @@ class testSDC(unittest.TestCase):
         for inf in addProject:
             elements = self.driver.find_elements_by_name(inf)
             for i in elements:
-                #time.sleep(waitToLoad)
                 if i.is_enabled():
-                    if '<input' in i.get_property('outerHTML'):
+                    if i.get_property('tagName') == 'INPUT':
                         i.clear()
                         i.send_keys(addProject[inf])
                     else:
                         i.send_keys(addProject[inf])
+                        time.sleep(waitToLoad)
 
         saveButton = self.driver.find_element_by_css_selector('body > table:nth-child(3) > tbody > tr > td > table > tbody > tr > td:nth-child(1) > button')
         saveButton.click()
@@ -129,13 +129,13 @@ class testSDC(unittest.TestCase):
         for inf in addProject:
             elements = self.driver.find_elements_by_name(inf)
             for i in elements:
-                #time.sleep(waitToLoad)
                 if i.is_enabled():
-                    if '<input' in i.get_property('outerHTML'):
+                    if i.get_property('tagName') == 'INPUT':
                         i.clear()
                         i.send_keys(addProject[inf])
                     else:
                         i.send_keys(addProject[inf])
+                        time.sleep(waitToLoad)
 
         saveButton = self.driver.find_element_by_css_selector('body > table:nth-child(3) > tbody > tr > td > table > tbody > tr > td:nth-child(1) > button')
         saveButton.click()
@@ -160,13 +160,13 @@ class testSDC(unittest.TestCase):
         for inf in addProject:
             elements = self.driver.find_elements_by_name(inf)
             for i in elements:
-                #time.sleep(waitToLoad)
                 if i.is_enabled():
-                    if '<input' in i.get_property('outerHTML'):
+                    if i.get_property('tagName') == 'INPUT':
                         i.clear()
                         i.send_keys(addProject[inf])
                     else:
                         i.send_keys(addProject[inf])
+                        time.sleep(waitToLoad)
 
         saveButton = self.driver.find_element_by_css_selector('body > table:nth-child(3) > tbody > tr > td > table > tbody > tr > td:nth-child(1) > button')
         saveButton.click()
@@ -193,13 +193,13 @@ class testSDC(unittest.TestCase):
         for inf in addProject:
             elements = self.driver.find_elements_by_name(inf)
             for i in elements:
-                #time.sleep(waitToLoad)
                 if i.is_enabled():
-                    if '<input' in i.get_property('outerHTML'):
+                    if i.get_property('tagName') == 'INPUT':
                         i.clear()
                         i.send_keys(addProject[inf])
                     else:
                         i.send_keys(addProject[inf])
+                        time.sleep(waitToLoad)
 
         saveButton = self.driver.find_element_by_css_selector('body > table:nth-child(3) > tbody > tr > td > table > tbody > tr > td:nth-child(1) > button')
         saveButton.click()
@@ -219,7 +219,7 @@ class testSDC(unittest.TestCase):
             'vtargetpress' : '119',
             'vdatarackcount' : '1',
             'vhumidity' : '82',
-            'vpressure' : '0.92',
+            'vpressure' : '0.918',
             'vtemp' : '70'
         }
         self.createUSProject()
@@ -242,11 +242,12 @@ class testSDC(unittest.TestCase):
             elements = self.driver.find_elements_by_name(inf)
             for i in elements:
                 if i.is_enabled():
-                    if '<input' in i.get_property('outerHTML'):
+                    if i.get_property('tagName') == 'INPUT':
                         i.clear()
                         i.send_keys(info[inf])
                     else:
                         i.send_keys(info[inf])
+                        time.sleep(waitToLoad)
 
         #Save the room info and return to rooms page
         self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[5]/div[1]/button[1]').click()
@@ -274,13 +275,13 @@ class testSDC(unittest.TestCase):
         for inf in info:
             elements = self.driver.find_elements_by_name(inf)
             for i in elements:
-                time.sleep(waitToLoad)
                 if i.is_enabled():
-                    if '<input' in i.get_property('outerHTML'):
+                    if i.get_property('tagName') == 'INPUT':
                         i.clear()
                         i.send_keys(info[inf])
                     else:
                         i.send_keys(info[inf])
+                        time.sleep(waitToLoad)
                         
         self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[4]/div/button[2]').click()
         self.driver.switch_to.window(roomsPage)
@@ -315,13 +316,13 @@ class testSDC(unittest.TestCase):
             for inf in material:
                 elements = self.driver.find_elements_by_name(inf)
                 for i in elements:
-                    time.sleep(waitToLoad)
                     if i.is_enabled():
-                        if '<input' in i.get_property('outerHTML'):
+                        if i.get_property('tagName') == 'INPUT':
                             i.clear()
                             i.send_keys(material[inf])
                         else:
                             i.send_keys(material[inf])
+                            time.sleep(waitToLoad)
             self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/div[4]/div/button[1]').click()
             time.sleep(3)
             self.driver.switch_to.window(roomsPage)            
@@ -329,11 +330,9 @@ class testSDC(unittest.TestCase):
 
         #click on the calculate button
         self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[6]').click()
-        time.sleep(10)
 
         #return to the projects page 
         self.driver.find_element_by_link_text('Projects').click()
-        time.sleep(5)
 
 
     def deleteAllProjects(self):
@@ -352,15 +351,18 @@ class testSDC(unittest.TestCase):
         projectList = self.driver.find_elements_by_xpath('//*[@id="tProjects"]/tbody/tr')
         print(len(projectList))
 
+    # @classmethod
+    # def tearDownClass(inst):
+    #     pass
+
     @classmethod
     def tearDownClass(inst):
         #delete all the projects for this account
-        time.sleep(20)
         projectList = inst.driver.find_elements_by_xpath('//*[@id="tProjects"]/tbody/tr')
         print(len(projectList))
         for _ in range(len(projectList)):
             inst.driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr[1]/td[2]/a[2]/img').click()
-            time.sleep(2)
+            time.sleep(1)
             inst.driver.find_element_by_xpath('/html/body/div[3]/div/div[4]/div[2]/button').click()
 
         projectList = inst.driver.find_elements_by_xpath('//*[@id="tProjects"]/tbody/tr')
