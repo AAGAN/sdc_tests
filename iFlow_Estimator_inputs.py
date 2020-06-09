@@ -1,7 +1,10 @@
 #server to test
-server = "http://10.16.74.48/sdc/" 
-#server = "http://www.suppressiondesigncenter.com"
+localDevelopmentServer = "http://10.16.74.48/sdc/" 
+publicDevelopmentServer = "http://spk-dev.com/"
+productionServer = "http://www.suppressiondesigncenter.com"
 
+server = publicDevelopmentServer
+waitToLoad = 0.5
 #login page https://www.suppressiondesigncenter.com/sdc/
 fUsername = 'aagan2'
 fPassword = 'Jci8124@agan'
@@ -141,7 +144,7 @@ hydraulicsOptions = {
 # New Room page
 BOMEnclosure = {
     'vroomname' : 'Enc1',
-    'cboHardware' : 'iFlow',
+    'cboHardware' : 'Orifice', #'iFlow',
     'vlength' : '5',
     'vwidth' : '5',
     'vheight' : '5',

@@ -268,6 +268,9 @@ driver.find_element_by_xpath('/html/body/table[1]/tbody/tr[2]/td/div/table/tbody
 #go to the projects page
 driver.find_element_by_link_text('Projects').click()
 
+
+#Acoustic Nozzle Calculator
+
 #Expand the project line and click on the "Hydraulic Run Manager"
 driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr/td[1]').click()
 time.sleep(waitToLoad)
