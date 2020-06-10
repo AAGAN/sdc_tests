@@ -79,12 +79,12 @@ class testSDC(unittest.TestCase):
         loginButton = inst.driver.find_element_by_css_selector('#login > div > div > div > div > div > table > tbody > tr:nth-child(3) > td > a')
         loginButton.click()
         
-    def test_createSIProject(self):
+    def test_createInertSIProject(self):
         self.assertEqual(self.driver.current_url, server+'fsdc/projects.php')
         self.deleteAllProjects()
         addProjectInfo = addProject
         addProjectInfo['cboUnits'] = 'Metric'
-        addProjectInfo['projectname'] = 'test_createSIProject'
+        addProjectInfo['projectname'] = 'test_createInertSIProject'
         projectsPage = self.driver.current_window_handle
         newProjectButton = self.driver.find_element_by_link_text('New Project')
         newProjectButton.click()
@@ -113,11 +113,11 @@ class testSDC(unittest.TestCase):
         projectList = self.driver.find_elements_by_xpath('//*[@id="tProjects"]/tbody/tr')
         self.assertEqual(len(projectList),1)
 
-    def createSIProject(self):
+    def createInertSIProject(self):
         self.deleteAllProjects()
         addProjectInfo = addProject
         addProjectInfo['cboUnits'] = 'Metric'
-        addProjectInfo['projectname'] = 'test_createSIProject'
+        addProjectInfo['projectname'] = 'test_createInertSIProject'
         projectsPage = self.driver.current_window_handle
         newProjectButton = self.driver.find_element_by_link_text('New Project')
         newProjectButton.click()
@@ -143,12 +143,12 @@ class testSDC(unittest.TestCase):
         #switch back to the project page and select the last created project
         self.driver.switch_to.window(projectsPage)
 
-    def test_createUSProject(self):
+    def test_createInertUSProject(self):
         self.assertEqual(self.driver.current_url, server+'fsdc/projects.php')
         self.deleteAllProjects()
         addProjectInfo = addProject
         addProjectInfo['cboUnits'] = 'US'
-        addProjectInfo['projectname'] = 'test_createUSProject'
+        addProjectInfo['projectname'] = 'test_createInertUSProject'
         projectsPage = self.driver.current_window_handle
         newProjectButton = self.driver.find_element_by_link_text('New Project')
         newProjectButton.click()
@@ -177,11 +177,11 @@ class testSDC(unittest.TestCase):
         projectList = self.driver.find_elements_by_xpath('//*[@id="tProjects"]/tbody/tr')
         self.assertEqual(len(projectList),1)
 
-    def createUSProject(self):
+    def createInertUSProject(self):
         self.deleteAllProjects()
         addProjectInfo = addProject
         addProjectInfo['cboUnits'] = 'US'
-        addProjectInfo['projectname'] = 'test_createUSProject'
+        addProjectInfo['projectname'] = 'test_createInertUSProject'
         projectsPage = self.driver.current_window_handle
         newProjectButton = self.driver.find_element_by_link_text('New Project')
         newProjectButton.click()
@@ -207,7 +207,69 @@ class testSDC(unittest.TestCase):
         #switch back to the project page and select the last created project
         self.driver.switch_to.window(projectsPage)
 
-    def test_acousticNozzle_US(self):
+    def createHalocarbonUSProject(self):
+        self.deleteAllProjects()
+        addProjectInfo = addProject
+        addProjectInfo['cboSystem'] = 'Halocarbon'
+        addProjectInfo['cboUnits'] = 'US'
+        addProjectInfo['projectname'] = 'test_createHalocarbonUSProject'
+        projectsPage = self.driver.current_window_handle
+        newProjectButton = self.driver.find_element_by_link_text('New Project')
+        newProjectButton.click()
+
+        #fill the new porject form and submit it
+        self.driver.switch_to.window("New Project")
+
+        #This code deals with cases where some elements are disabled
+        for inf in addProject:
+            elements = self.driver.find_elements_by_name(inf)
+            for i in elements:
+                if i.is_enabled():
+                    if i.get_property('tagName') == 'INPUT':
+                        i.clear()
+                        i.send_keys(addProject[inf])
+                    else:
+                        i.send_keys(addProject[inf])
+                        time.sleep(waitToLoad)
+
+        saveButton = self.driver.find_element_by_css_selector('body > table:nth-child(3) > tbody > tr > td > table > tbody > tr > td:nth-child(1) > button')
+        saveButton.click()
+
+        #switch back to the project page and select the last created project
+        self.driver.switch_to.window(projectsPage)
+
+    def createHalocarbonSIProject(self):
+        self.deleteAllProjects()
+        addProjectInfo = addProject
+        addProjectInfo['cboSystem'] = 'Halocarbon'
+        addProjectInfo['cboUnits'] = 'Metric'
+        addProjectInfo['projectname'] = 'test_createHalocarbonSIProject'
+        projectsPage = self.driver.current_window_handle
+        newProjectButton = self.driver.find_element_by_link_text('New Project')
+        newProjectButton.click()
+
+        #fill the new porject form and submit it
+        self.driver.switch_to.window("New Project")
+
+        #This code deals with cases where some elements are disabled
+        for inf in addProject:
+            elements = self.driver.find_elements_by_name(inf)
+            for i in elements:
+                if i.is_enabled():
+                    if i.get_property('tagName') == 'INPUT':
+                        i.clear()
+                        i.send_keys(addProject[inf])
+                    else:
+                        i.send_keys(addProject[inf])
+                        time.sleep(waitToLoad)
+
+        saveButton = self.driver.find_element_by_css_selector('body > table:nth-child(3) > tbody > tr > td > table > tbody > tr > td:nth-child(1) > button')
+        saveButton.click()
+
+        #switch back to the project page and select the last created project
+        self.driver.switch_to.window(projectsPage)
+
+    def test_acousticNozzleInertOrifice_US(self):
         BOMEnclosure = {
             'vroomname' : 'Enc1',
             'cboHardware' : 'Orifice', #'iFlow',
@@ -222,7 +284,7 @@ class testSDC(unittest.TestCase):
             'vpressure' : '0.918',
             'vtemp' : '70'
         }
-        self.createUSProject()
+        self.createInertUSProject()
 
         #Expand the project line and click on the "Hydraulic Run Manager"
         self.driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr/td[1]').click()
@@ -257,34 +319,48 @@ class testSDC(unittest.TestCase):
         self.driver.find_element_by_xpath('//*[@id="tRooms"]/tbody/tr').click()
         time.sleep(1)
 
-        #click on the new button in the Nozzles iFrame
-        self.driver.switch_to.default_content()
-        self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
-        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/button[1]').click()
-        #self.driver.find_element_by_xpath('body > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > button:nth-child(1)')
-
-        self.driver.switch_to.window('ewindow')
-
-        addNozzle = {
-            #'cboRun' , 'NameOfRun',
-            'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
-            'cboPeakRate' : '601-900',
-            'vNozzleCount' : '1'
-        }
-        info = addNozzle
-        for inf in info:
-            elements = self.driver.find_elements_by_name(inf)
-            for i in elements:
-                if i.is_enabled():
-                    if i.get_property('tagName') == 'INPUT':
-                        i.clear()
-                        i.send_keys(info[inf])
-                    else:
-                        i.send_keys(info[inf])
-                        time.sleep(waitToLoad)
-                        
-        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[4]/div/button[2]').click()
-        self.driver.switch_to.window(roomsPage)
+        Nozzles = [
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '2'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '1'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '1'
+            }
+        ]
+        for noz in Nozzles:
+            #click on the new button in the Nozzles iFrame
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            #self.driver.find_element_by_xpath('body > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > button:nth-child(1)')
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window('ewindow')
+            for inf in noz:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(noz[inf])
+                        else:
+                            i.send_keys(noz[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[4]/div/button[2]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
 
         addMaterial = [
             {
@@ -312,7 +388,9 @@ class testSDC(unittest.TestCase):
             self.driver.switch_to.default_content()
             self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
             self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            time.sleep(2)
             self.driver.switch_to.window('ewindow')
+            
             for inf in material:
                 elements = self.driver.find_elements_by_name(inf)
                 for i in elements:
@@ -324,12 +402,741 @@ class testSDC(unittest.TestCase):
                             i.send_keys(material[inf])
                             time.sleep(waitToLoad)
             self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/div[4]/div/button[1]').click()
-            time.sleep(3)
+            time.sleep(waitToLoad)
             self.driver.switch_to.window(roomsPage)            
         
 
         #click on the calculate button
         self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[6]').click()
+        time.sleep(10)
+
+        #return to the projects page 
+        self.driver.find_element_by_link_text('Projects').click()
+
+    def test_acousticNozzleInertiFlow_US(self):
+        BOMEnclosure = {
+            'vroomname' : 'Enc1',
+            'cboHardware' : 'iFlow',
+            'vlength' : '0',
+            'vwidth' : '0',
+            'vheight' : '0',
+            'vvolume' : '1558',
+            'vreceiverdist' : '3',
+            'vtargetpress' : '119',
+            'vdatarackcount' : '1',
+            'vhumidity' : '82',
+            'vpressure' : '0.918',
+            'vtemp' : '70'
+        }
+        self.createInertUSProject()
+
+        #Expand the project line and click on the "Hydraulic Run Manager"
+        self.driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr/td[1]').click()
+        time.sleep(waitToLoad)
+        
+
+        self.driver.find_element_by_link_text('Acoustic Nozzle Calculation').click()
+
+        #click on new room button
+        roomsPage = self.driver.current_window_handle
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[3]').click()
+
+        self.driver.switch_to.window('ewindow')
+
+        info = BOMEnclosure
+        for inf in info:
+            elements = self.driver.find_elements_by_name(inf)
+            for i in elements:
+                if i.is_enabled():
+                    if i.get_property('tagName') == 'INPUT':
+                        i.clear()
+                        i.send_keys(info[inf])
+                    else:
+                        i.send_keys(info[inf])
+                        time.sleep(waitToLoad)
+
+        #Save the room info and return to rooms page
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[5]/div[1]/button[1]').click()
+        self.driver.switch_to.window(roomsPage)
+
+        #click on the room 
+        self.driver.find_element_by_xpath('//*[@id="tRooms"]/tbody/tr').click()
+        time.sleep(1)
+
+        
+
+        Nozzles = [
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '2'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '1'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '1'
+            }
+        ]
+        for noz in Nozzles:
+            #click on the new button in the Nozzles iFrame
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            #self.driver.find_element_by_xpath('body > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > button:nth-child(1)')
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window('ewindow')
+            for inf in noz:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(noz[inf])
+                        else:
+                            i.send_keys(noz[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[4]/div/button[2]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        addMaterial = [
+            {
+                'cboMaterialLocation' : 'Ceiling',
+                'cboMaterialType': 'Energy mineral fiber, 1',
+                'vArea': '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Concrete block, painted',
+                'vArea' : '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Plaster, 7/8", lath on studs',
+                'vArea' : '276.74'
+            },
+            {
+                'cboMaterialLocation' : 'Floor',
+                'cboMaterialType' : 'Floors, concrete or terrazzo',
+                'vArea' : '123.22'
+            }
+        ]
+        for material in addMaterial:
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            time.sleep(2)
+            self.driver.switch_to.window('ewindow')
+            
+            for inf in material:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(material[inf])
+                        else:
+                            i.send_keys(material[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/div[4]/div/button[1]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        #click on the calculate button
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[6]').click()
+        time.sleep(10)
+
+        #return to the projects page 
+        self.driver.find_element_by_link_text('Projects').click()
+
+    def test_acousticNozzleSapphire_US(self):
+        BOMEnclosure = {
+            'vroomname' : 'Enc1',
+            'cboHardware' : 'Sapphire',
+            'vlength' : '0',
+            'vwidth' : '0',
+            'vheight' : '0',
+            'vvolume' : '1558',
+            'vreceiverdist' : '3',
+            'vtargetpress' : '119',
+            'vdatarackcount' : '1',
+            'vhumidity' : '82',
+            'vpressure' : '0.918',
+            'vtemp' : '70'
+        }
+        self.createHalocarbonUSProject()
+
+        #Expand the project line and click on the "Hydraulic Run Manager"
+        self.driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr/td[1]').click()
+        time.sleep(waitToLoad)
+        
+
+        self.driver.find_element_by_link_text('Acoustic Nozzle Calculation').click()
+
+        #click on new room button
+        roomsPage = self.driver.current_window_handle
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[3]').click()
+
+        self.driver.switch_to.window('ewindow')
+
+        info = BOMEnclosure
+        for inf in info:
+            elements = self.driver.find_elements_by_name(inf)
+            for i in elements:
+                if i.is_enabled():
+                    if i.get_property('tagName') == 'INPUT':
+                        i.clear()
+                        i.send_keys(info[inf])
+                    else:
+                        i.send_keys(info[inf])
+                        time.sleep(waitToLoad)
+
+        #Save the room info and return to rooms page
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[5]/div[1]/button[1]').click()
+        self.driver.switch_to.window(roomsPage)
+
+        #click on the room 
+        self.driver.find_element_by_xpath('//*[@id="tRooms"]/tbody/tr').click()
+        time.sleep(1)
+
+        
+
+        Nozzles = [
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '2'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '1'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '1'
+            }
+        ]
+        for noz in Nozzles:
+            #click on the new button in the Nozzles iFrame
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            #self.driver.find_element_by_xpath('body > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > button:nth-child(1)')
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window('ewindow')
+            for inf in noz:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(noz[inf])
+                        else:
+                            i.send_keys(noz[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[4]/div/button[2]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        addMaterial = [
+            {
+                'cboMaterialLocation' : 'Ceiling',
+                'cboMaterialType': 'Energy mineral fiber, 1',
+                'vArea': '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Concrete block, painted',
+                'vArea' : '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Plaster, 7/8", lath on studs',
+                'vArea' : '276.74'
+            },
+            {
+                'cboMaterialLocation' : 'Floor',
+                'cboMaterialType' : 'Floors, concrete or terrazzo',
+                'vArea' : '123.22'
+            }
+        ]
+        for material in addMaterial:
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            time.sleep(2)
+            self.driver.switch_to.window('ewindow')
+            
+            for inf in material:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(material[inf])
+                        else:
+                            i.send_keys(material[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/div[4]/div/button[1]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        #click on the calculate button
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[6]').click()
+        time.sleep(10)
+
+        #return to the projects page 
+        self.driver.find_element_by_link_text('Projects').click()
+
+    def test_acousticNozzleInertOrifice_SI(self):
+        BOMEnclosure = {
+            'vroomname' : 'Enc1',
+            'cboHardware' : 'Orifice', #'iFlow',
+            'vlength' : '0',
+            'vwidth' : '0',
+            'vheight' : '0',
+            'vvolume' : '20',
+            'vreceiverdist' : '1',
+            'vtargetpress' : '119',
+            'vdatarackcount' : '1',
+            'vhumidity' : '82',
+            'vpressure' : '0.918',
+            'vtemp' : '20'
+        }
+        self.createInertSIProject()
+
+        #Expand the project line and click on the "Hydraulic Run Manager"
+        self.driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr/td[1]').click()
+        time.sleep(waitToLoad)
+        
+
+        self.driver.find_element_by_link_text('Acoustic Nozzle Calculation').click()
+
+        #click on new room button
+        roomsPage = self.driver.current_window_handle
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[3]').click()
+
+        self.driver.switch_to.window('ewindow')
+
+        info = BOMEnclosure
+        for inf in info:
+            elements = self.driver.find_elements_by_name(inf)
+            for i in elements:
+                if i.is_enabled():
+                    if i.get_property('tagName') == 'INPUT':
+                        i.clear()
+                        i.send_keys(info[inf])
+                    else:
+                        i.send_keys(info[inf])
+                        time.sleep(waitToLoad)
+
+        #Save the room info and return to rooms page
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[5]/div[1]/button[1]').click()
+        self.driver.switch_to.window(roomsPage)
+
+        #click on the room 
+        self.driver.find_element_by_xpath('//*[@id="tRooms"]/tbody/tr').click()
+        time.sleep(1)
+
+        Nozzles = [
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '0-8',
+                'vNozzleCount' : '2'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '0-8',
+                'vNozzleCount' : '1'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '0-8',
+                'vNozzleCount' : '1'
+            }
+        ]
+        for noz in Nozzles:
+            #click on the new button in the Nozzles iFrame
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            #self.driver.find_element_by_xpath('body > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > button:nth-child(1)')
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window('ewindow')
+            for inf in noz:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(noz[inf])
+                        else:
+                            i.send_keys(noz[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[4]/div/button[2]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        addMaterial = [
+            {
+                'cboMaterialLocation' : 'Ceiling',
+                'cboMaterialType': 'Energy mineral fiber, 1',
+                'vArea': '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Concrete block, painted',
+                'vArea' : '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Plaster, 7/8", lath on studs',
+                'vArea' : '276.74'
+            },
+            {
+                'cboMaterialLocation' : 'Floor',
+                'cboMaterialType' : 'Floors, concrete or terrazzo',
+                'vArea' : '123.22'
+            }
+        ]
+        for material in addMaterial:
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            time.sleep(2)
+            self.driver.switch_to.window('ewindow')
+            
+            for inf in material:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(material[inf])
+                        else:
+                            i.send_keys(material[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/div[4]/div/button[1]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        #click on the calculate button
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[6]').click()
+        time.sleep(10)
+
+        #return to the projects page 
+        self.driver.find_element_by_link_text('Projects').click()
+
+    def test_acousticNozzleInertiFlow_SI(self):
+        BOMEnclosure = {
+            'vroomname' : 'Enc1',
+            'cboHardware' : 'iFlow',
+            'vlength' : '0',
+            'vwidth' : '0',
+            'vheight' : '0',
+            'vvolume' : '20',
+            'vreceiverdist' : '1',
+            'vtargetpress' : '119',
+            'vdatarackcount' : '1',
+            'vhumidity' : '82',
+            'vpressure' : '0.918',
+            'vtemp' : '20'
+        }
+        self.createInertSIProject()
+
+        #Expand the project line and click on the "Hydraulic Run Manager"
+        self.driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr/td[1]').click()
+        time.sleep(waitToLoad)
+        
+
+        self.driver.find_element_by_link_text('Acoustic Nozzle Calculation').click()
+
+        #click on new room button
+        roomsPage = self.driver.current_window_handle
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[3]').click()
+
+        self.driver.switch_to.window('ewindow')
+
+        info = BOMEnclosure
+        for inf in info:
+            elements = self.driver.find_elements_by_name(inf)
+            for i in elements:
+                if i.is_enabled():
+                    if i.get_property('tagName') == 'INPUT':
+                        i.clear()
+                        i.send_keys(info[inf])
+                    else:
+                        i.send_keys(info[inf])
+                        time.sleep(waitToLoad)
+
+        #Save the room info and return to rooms page
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[5]/div[1]/button[1]').click()
+        self.driver.switch_to.window(roomsPage)
+
+        #click on the room 
+        self.driver.find_element_by_xpath('//*[@id="tRooms"]/tbody/tr').click()
+        time.sleep(1)
+
+        
+
+        Nozzles = [
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '2'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '1'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - INERT',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '601-900',
+                'vNozzleCount' : '1'
+            }
+        ]
+        for noz in Nozzles:
+            #click on the new button in the Nozzles iFrame
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            #self.driver.find_element_by_xpath('body > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > button:nth-child(1)')
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window('ewindow')
+            for inf in noz:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(noz[inf])
+                        else:
+                            i.send_keys(noz[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[4]/div/button[2]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        addMaterial = [
+            {
+                'cboMaterialLocation' : 'Ceiling',
+                'cboMaterialType': 'Energy mineral fiber, 1',
+                'vArea': '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Concrete block, painted',
+                'vArea' : '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Plaster, 7/8", lath on studs',
+                'vArea' : '276.74'
+            },
+            {
+                'cboMaterialLocation' : 'Floor',
+                'cboMaterialType' : 'Floors, concrete or terrazzo',
+                'vArea' : '123.22'
+            }
+        ]
+        for material in addMaterial:
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            time.sleep(2)
+            self.driver.switch_to.window('ewindow')
+            
+            for inf in material:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(material[inf])
+                        else:
+                            i.send_keys(material[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/div[4]/div/button[1]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        #click on the calculate button
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[6]').click()
+        time.sleep(10)
+
+        #return to the projects page 
+        self.driver.find_element_by_link_text('Projects').click()
+
+    def test_acousticNozzleSapphire_SI(self):
+        BOMEnclosure = {
+            'vroomname' : 'Enc1',
+            'cboHardware' : 'Sapphire',
+            'vlength' : '0',
+            'vwidth' : '0',
+            'vheight' : '0',
+            'vvolume' : '20',
+            'vreceiverdist' : '1',
+            'vtargetpress' : '119',
+            'vdatarackcount' : '1',
+            'vhumidity' : '82',
+            'vpressure' : '0.918',
+            'vtemp' : '20'
+        }
+        self.createHalocarbonSIProject()
+
+        #Expand the project line and click on the "Hydraulic Run Manager"
+        self.driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr/td[1]').click()
+        time.sleep(waitToLoad)
+        
+
+        self.driver.find_element_by_link_text('Acoustic Nozzle Calculation').click()
+
+        #click on new room button
+        roomsPage = self.driver.current_window_handle
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[3]').click()
+
+        self.driver.switch_to.window('ewindow')
+
+        info = BOMEnclosure
+        for inf in info:
+            elements = self.driver.find_elements_by_name(inf)
+            for i in elements:
+                if i.is_enabled():
+                    if i.get_property('tagName') == 'INPUT':
+                        i.clear()
+                        i.send_keys(info[inf])
+                    else:
+                        i.send_keys(info[inf])
+                        time.sleep(waitToLoad)
+
+        #Save the room info and return to rooms page
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[5]/div[1]/button[1]').click()
+        self.driver.switch_to.window(roomsPage)
+
+        #click on the room 
+        self.driver.find_element_by_xpath('//*[@id="tRooms"]/tbody/tr').click()
+        time.sleep(1)
+
+        
+
+        Nozzles = [
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - SAPPHIRE',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '2-4',
+                'vNozzleCount' : '2'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - SAPPHIRE',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '2-4',
+                'vNozzleCount' : '1'
+            },
+            {
+                #'cboRun' , 'NameOfRun',
+                'cboNozzType' : '3/4 Acoustic Nozzle - SAPPHIRE',# 'Standard Nozzle - INERT'
+                'cboPeakRate' : '2-4',
+                'vNozzleCount' : '1'
+            }
+        ]
+        for noz in Nozzles:
+            #click on the new button in the Nozzles iFrame
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            #self.driver.find_element_by_xpath('body > table > tbody > tr:nth-child(1) > td:nth-child(1) > table > tbody > tr > td:nth-child(2) > button:nth-child(1)')
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window('ewindow')
+            for inf in noz:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(noz[inf])
+                        else:
+                            i.send_keys(noz[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[3]/div[4]/div/button[2]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        addMaterial = [
+            {
+                'cboMaterialLocation' : 'Ceiling',
+                'cboMaterialType': 'Energy mineral fiber, 1',
+                'vArea': '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Concrete block, painted',
+                'vArea' : '123.22'
+            },
+            {
+                'cboMaterialLocation' : 'Wall',
+                'cboMaterialType' : 'Plaster, 7/8", lath on studs',
+                'vArea' : '276.74'
+            },
+            {
+                'cboMaterialLocation' : 'Floor',
+                'cboMaterialType' : 'Floors, concrete or terrazzo',
+                'vArea' : '123.22'
+            }
+        ]
+        for material in addMaterial:
+            self.driver.switch_to.default_content()
+            self.driver.switch_to.frame(self.driver.find_element_by_id('frameRoom'))
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td[1]/table/tbody/tr/td[2]/button[1]').click()
+            time.sleep(2)
+            self.driver.switch_to.window('ewindow')
+            
+            for inf in material:
+                elements = self.driver.find_elements_by_name(inf)
+                for i in elements:
+                    if i.is_enabled():
+                        if i.get_property('tagName') == 'INPUT':
+                            i.clear()
+                            i.send_keys(material[inf])
+                        else:
+                            i.send_keys(material[inf])
+                            time.sleep(waitToLoad)
+            self.driver.find_element_by_xpath('/html/body/table/tbody/tr[2]/td/div[4]/div/button[1]').click()
+            time.sleep(waitToLoad)
+            self.driver.switch_to.window(roomsPage)            
+        
+
+        #click on the calculate button
+        self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[6]').click()
+        time.sleep(10)
 
         #return to the projects page 
         self.driver.find_element_by_link_text('Projects').click()
@@ -370,4 +1177,4 @@ class testSDC(unittest.TestCase):
         inst.driver.quit()
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
