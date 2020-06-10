@@ -78,7 +78,12 @@ class testSDC(unittest.TestCase):
             print('no cookie question')
         loginButton = inst.driver.find_element_by_css_selector('#login > div > div > div > div > div > table > tbody > tr:nth-child(3) > td > a')
         loginButton.click()
-        
+
+        try:
+            inst.driver.find_elements_by_xpath('/html/body/div/table/tbody/tr[4]/td[2]/button[2]').click()
+        except:
+            print('no TOS page.')
+                    
     def test_createInertSIProject(self):
         self.assertEqual(self.driver.current_url, server+'fsdc/projects.php')
         self.deleteAllProjects()
