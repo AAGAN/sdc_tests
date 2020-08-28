@@ -53,12 +53,14 @@ class MyHTMLParser(HTMLParser):
 parser = MyHTMLParser()
 
 class testSDC(unittest.TestCase):
+
+    #####Initialize
     @classmethod
     def setUpClass(inst):
         #start the managed chrome webdriver window
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized --incognito")
-        inst.driver = webdriver.Chrome('C:\\Users\\jahmada\\OneDrive - Johnson Controls\\Downloads\\chromedriver.exe',options=options)
+        inst.driver = webdriver.Chrome('chromedriver.exe',options=options)
         inst.driver.implicitly_wait(5)
         inst.driver.get(server)
 
@@ -83,7 +85,7 @@ class testSDC(unittest.TestCase):
             inst.driver.find_elements_by_xpath('/html/body/div/table/tbody/tr[4]/td[2]/button[2]').click()
         except:
             print('no TOS page.')
-                    
+
     def test_createInertSIProject(self):
         self.assertEqual(self.driver.current_url, server+'fsdc/projects.php')
         self.deleteAllProjects()
@@ -274,6 +276,8 @@ class testSDC(unittest.TestCase):
         #switch back to the project page and select the last created project
         self.driver.switch_to.window(projectsPage)
 
+    ##### Testing Acoustic Nozzle
+
     def test_acousticNozzleInertOrifice_US(self):
         BOMEnclosure = {
             'vroomname' : 'Enc1',
@@ -413,6 +417,7 @@ class testSDC(unittest.TestCase):
 
         #click on the calculate button
         self.driver.find_element_by_xpath('/html/body/table/tbody/tr[1]/td/button[6]').click()
+        print(self.driver.page_source)
         time.sleep(10)
 
         #return to the projects page 
@@ -1146,6 +1151,7 @@ class testSDC(unittest.TestCase):
         #return to the projects page 
         self.driver.find_element_by_link_text('Projects').click()
 
+    #####clean up
 
     def deleteAllProjects(self):
         #self.assertEqual(self.driver.current_url, server+'fsdc/projects.php')
@@ -1173,9 +1179,12 @@ class testSDC(unittest.TestCase):
         projectList = inst.driver.find_elements_by_xpath('//*[@id="tProjects"]/tbody/tr')
         print(len(projectList))
         for _ in range(len(projectList)):
-            inst.driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr[1]/td[2]/a[2]/img').click()
-            time.sleep(1)
-            inst.driver.find_element_by_xpath('/html/body/div[3]/div/div[4]/div[2]/button').click()
+            try:
+                inst.driver.find_element_by_xpath('//*[@id="tProjects"]/tbody/tr[1]/td[2]/a[2]/img').click()
+                time.sleep(2)
+                inst.driver.find_element_by_xpath('/html/body/div[3]/div/div[4]/div[2]/button').click()
+            except:
+                print('All projects are deleted!')
 
         projectList = inst.driver.find_elements_by_xpath('//*[@id="tProjects"]/tbody/tr')
         print(len(projectList))
