@@ -21,5 +21,4 @@ tests/08_complex_system/ResultsOut_old.tmp
 tests/08_complex_system/TEMPINPUT.TMP
 tests/new_calc_engine/70barSapphire.bak
 tests/new_calc_engine/CONVERGE.LOG
-__pycache__/iFlow_Estimator_inputs.cpython-38.pyc
-__pycache__/iFlow_Estimator_inputs.cpython-38.pyc
+*.pyc
